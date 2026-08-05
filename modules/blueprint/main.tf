@@ -81,11 +81,14 @@ locals {
 
   # Build regional_parameters for each enabled region (only when blueprint needs them)
   regional_parameters = local.has_regional_parameters ? {
-    for r, params in var.regional_parameters : r => {
-      "S3Location" = params.s3_uri
-      "Subnets"    = join(",", params.subnet_ids)
-      "VpcId"      = params.vpc_id
-    }
+    for r, params in var.regional_parameters : r => merge(
+      {
+        "S3Location" = params.s3_uri
+        "Subnets"    = join(",", params.subnet_ids)
+        "VpcId"      = params.vpc_id
+      },
+      params.permissions_boundary_arn != null ? { "PermissionsBoundaryArn" = params.permissions_boundary_arn } : {}
+    )
   } : null
 
   # Resolve domain unit IDs: user-provided list, or fall back to root domain unit

@@ -314,9 +314,10 @@ module "tooling_blueprint" {
 
   regional_parameters = {
     (local.region) = {
-      vpc_id     = var.vpc_id
-      subnet_ids = var.subnet_ids
-      s3_uri     = "s3://${local.s3_bucket_name}"
+      vpc_id                   = var.vpc_id
+      subnet_ids               = var.subnet_ids
+      s3_uri                   = "s3://${local.s3_bucket_name}"
+      permissions_boundary_arn = var.permissions_boundary_arn
     }
   }
 

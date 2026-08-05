@@ -153,3 +153,15 @@ variable "query_execution_role_arn" {
     error_message = "Must be a valid IAM role ARN."
   }
 }
+
+# --- Permissions Boundary (fork addition, not upstream) ---
+variable "permissions_boundary_arn" {
+  description = "ARN of an IAM permissions boundary policy to pass to the Tooling blueprint as its PermissionsBoundaryArn regional parameter. When set, DataZone attaches this boundary to every IAM role the Tooling blueprint provisions during project creation (datazone_usr_role, AmazonBedrockServiceRole, AmazonBedrockLambdaExecutionRole) - needed when the account enforces an org policy that denies iam:CreateRole unless the new role carries a specific boundary."
+  type        = string
+  default     = null
+
+  validation {
+    condition     = var.permissions_boundary_arn == null || can(regex("^arn:aws:iam::[0-9]{12}:policy/.+", var.permissions_boundary_arn))
+    error_message = "Permissions boundary ARN must be a valid IAM policy ARN."
+  }
+}

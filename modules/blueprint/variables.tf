@@ -44,9 +44,10 @@ variable "global_parameters" {
 variable "regional_parameters" {
   description = "Map of AWS regions to their infrastructure parameters (vpc_id, subnet_ids, s3_bucket_uri). Keys become enabled_regions. Leave empty for blueprints that don't require regional parameters (e.g., QuickSight, Bedrock, MLflowApp, LakehouseAdmin)."
   type = map(object({
-    vpc_id     = string
-    subnet_ids = list(string)
-    s3_uri     = string
+    vpc_id                   = string
+    subnet_ids               = list(string)
+    s3_uri                   = string
+    permissions_boundary_arn = optional(string)
   }))
   default = {}
 
